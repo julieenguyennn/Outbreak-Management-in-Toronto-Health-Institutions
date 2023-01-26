@@ -1,0 +1,2 @@
+simulated_data <- tibble("School" = 1:100, "Vaccine 1" = sample(runif(100,min = 0, max = 100), size = 100, replace = TRUE), "Vaccine 2" = sample(runif(100, min = 0, max = 100), size = 100, replace = TRUE))
+simulated_data

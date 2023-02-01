@@ -2,18 +2,15 @@ library(opendatatoronto)
 library(dplyr)
 
 # get package
-package <- show_package("99ff3657-b2e7-4005-a6fd-c36838ccc96d")
-package
+package <- show_package("80ce0bd7-adb2-4568-b9d7-712f6ba38e4e")
 
 # get all resources for this package
-resources <- list_package_resources("99ff3657-b2e7-4005-a6fd-c36838ccc96d")
+resources <- list_package_resources("80ce0bd7-adb2-4568-b9d7-712f6ba38e4e")
 
 # identify datastore resources; by default, Toronto Open Data sets datastore resource format to CSV for non-geospatial and GeoJSON for geospatial resources
-datastore_resources <- filter(resources, tolower(format) %in% 'csv')
-datastore_resources
+all_data <- filter(resources, tolower(format) %in% 'csv')
 
-# load the immunization coverage in the AY 2017-2018
-immunization_2017_2018 <- filter(datastore_resources, row_number()==1) %>% get_resource()
+# save data set
+write.csv(all_data,"/inputs/data/raw_data.csv")
+raw_data <- read.csv("inputs/data/raw_data.csv")
 
-# load the immunization coverage in the AY 2018-2019
-immunization_2018_2019 <- filter(datastore_resources, row_number()==1) %>% get_resource()

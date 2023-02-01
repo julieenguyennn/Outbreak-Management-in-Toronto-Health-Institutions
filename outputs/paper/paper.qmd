@@ -1,27 +1,119 @@
 ---
-title: "Analysis of Immunization Coverage in Toronto"
+title: "Outbreak Management in Toronto Health Institutions"
 author: "Julie Nguyen"
+date: "`r format(Sys.time(), '%d %B %Y')`"
 format: pdf
-abstract: this is an abstract
+output:
+  bookdown::pdf_document2:
+abstract: Outbreak management has always been one of the most important mission for healthcare institutions, not only to prevent transmissions of diseases/illnesses but also to protect public health. Especially in the COVID-19 era, outbreak response and management is considered as the top priority in healthcare institution operation. This paper discusses the big picture of outbreak management in Toronto health institutions from 2020 to 2022, as well as pointing out the relationship between healthcare setting, outbreak type and outbreak response.  
+execute: 
+  message: false
+  warning: false
 ---
 
-## Quarto
+## Introduction
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+  In the previous years, a lot has been learned with regards to the COVID-19 pandemic. With the unprecedented cases increase of different diseases, the responsibility for outbreak response and management in healthcare institutions has become more important than ever before. Outbreak management helps stop the further transmission of illnesses/diseases by identifying the source and implementing control measures. 
 
-## Running Code
+  In order to protect and improve public health, the Toronto Public Health works with healthcare institutions to prevent and control institutional outbreaks, including the use of best practices in infection prevention control. Healthcare institutions are required to monitor staff and patients/residents for signs and symptoms of gastroenteric and respiratory infections under the Ontario Health Protection and Promotion Act (HPPA). (CITE) The institutions must also actively seek, detect and report suspected and/or confirmed outbreaks to their local public health unit. 
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+  In the following paper, I will delve into the Outbreaks in Toronto Healthcare Institutions in the previous years to shed light on the differences and trends in reacting to outbreaks. I will first guide you through the data collection and analyzing process, which will be explained thoroughly in Section 2. Then I will visualize the data and explain the implications of the data, finally draw some limitations and conclusions of this data set.
+
+## Data
+### Data Collection
+
+  All the data used in this paper was obtained from the City of Toronto Open Data Portal and is titled "Outbreaks in Toronto Healthcare Institutions". The dataset is published by Toronto Public Health and is refreshed weekly, with the last refresh on Jan 19, 2023. The data provided on the portal include subsets of data from the year 2003. Nevertheless, I will just focus on the data from 2020 to 2022 in order to witness the changes in outbreak management during the COVID-19 era. According to opendatatoronto (cite), an outbreak is defined as "a localized increase (e.g. in an institution, or a specific ward or floor within an institution) in the rate of infection or illness, above that which is expected."
+
+  I first acquired the data using opendatatoronto package [@datatoronto] and imported to RStudio using the R package [cite]. To process the data, all the necessary libraries into R script, including tidyverse [@tidyverse] and janitor [@janitor] to clean and manipulate the data, ggplot2 [@ggplot], knitr [@knitr], RColorBrewer [@RColor], and kableExtra [@kableExtra] to visualize the data.
+
+  After loading the data to the local environment, I started to create new dataframes. As the opendatatoronto @datatoronto package consists of multiple datasets by year, I had to download and extract the datasets of the year 2020, 2021, and 2022 separately, and  calling it *outbreak_2020*, *outbreak_2021*, and *outbreak_2022* respectively (ADD FOOTNOTE HERE). 
+
+### Data Cleaning
+
+  For data cleaning, the target samples and focus were the type of outbreaks. I first observed the number occurrences of outbreaks from 2020 to 2022 in order to understand context of how outbreaks emerged. I also considered the type of outbreaks happened in each setting to understand whether the setting affect the control of outbreak. I thus filtered the datasets based on those criteria using tidyverse (@tidyverse) and janitor (@janitor), and dplyr (@dplyr). 
+  I then created two dataframes by outbreak type and outbreak setting in order to witnesss
+
+### Analyzing and Visualizing the Data
+
+  The Toronto Health Institutions divided the outbreaks into 03 main types: Enteric, Respiratory, and other types. Throughout the period, there was a total of 2080 cases reported to experience an outbreak, including a surge from 2021 to 2022. In particular, Toronto health institutions underwent 553 cases in 2020, 394 cases in 2021, and 1133 cases in 2022.
 
 ```{r}
-1 + 1
+library(dplyr)
+
 ```
 
-You can add options to executable code like this 
+  It is apparent that Respiratory diseases remain the major outbreak in Toronto healthcare institutions throughout the period.
 
 ```{r}
 #| echo: false
-2 * 2
+library(opendatatoronto)
+library(dplyr)
+library(janitor)
+library(tidyverse)
+library(knitr)
+library(RColorBrewer)
+library(kableExtra)
+
+package <- show_package("80ce0bd7-adb2-4568-b9d7-712f6ba38e4e")
+package
+
+# get all resources for this package
+resources <- list_package_resources("80ce0bd7-adb2-4568-b9d7-712f6ba38e4e")
+
+# identify datastore resources; by default, Toronto Open Data sets datastore resource format to CSV for non-geospatial and GeoJSON for geospatial resources
+datastore_resources <- filter(resources, tolower(format) %in% 'csv')
+
+# load the first datastore resource as a sample
+outbreak_2022 <- filter(datastore_resources, row_number()==15) %>% 
+  get_resource()
+
+# load the
+outbreak_2021 <- filter(datastore_resources, row_number()==14) %>% 
+  get_resource()
+
+# load the
+outbreak_2020 <- filter(datastore_resources, row_number()==13) %>% 
+  get_resource()
+
+outbreak_2020 %>% clean_names()
+outbreak_2021 %>% clean_names()
+outbreak_2022 %>% clean_names()
+
+#|echo:true
+# Number of occurrences in each type of outbreak throughout the years
+  # Count the outbreaks in each year by type 
+  ob_by_type_2020 <- outbreak_2020 %>% count(Type.of.Outbreak) %>% 
+    mutate(year = 2020) %>% rename(Occurences = "n")
+  ob_by_type_2021 <- outbreak_2021 %>% count(Type.of.Outbreak) %>% 
+    mutate(year=2021) %>% rename(Occurences = "n")
+  ob_by_type_2022 <- outbreak_2022 %>% count(Type.of.Outbreak) %>% 
+    mutate(year=2022) %>% rename(Occurences = "n")
+  
+  # Merge dataframes
+  ob_by_type <- bind_rows(ob_by_type_2020,ob_by_type_2021,ob_by_type_2022)
+
+  # Generate graph
+  ob_by_type$year <- as.factor(ob_by_type$year)
+  ggplot(data=ob_by_type, aes(x=year, y=Occurences, group=Type.of.Outbreak)) +
+    geom_line(aes(color=Type.of.Outbreak), size=0.8)+
+    geom_point(aes(color=Type.of.Outbreak))+
+    scale_linetype_manual(values=c("solid","dotted","twodash"))+
+    scale_color_brewer(palette="Dark2")+
+    theme_minimal()
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+
+
+```{r}
+library(dplyr)
+
+```
+
+aaaa 
+
+```{r}
+
+```
+
+
+## Reference

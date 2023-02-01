@@ -1,51 +1,25 @@
 ---
 title: "Outbreak Management in Toronto Health Institutions"
 author: "Julie Nguyen"
-date: "`r format(Sys.time(), '%d %B %Y')`"
-format: pdf
-output:
-  bookdown::pdf_document2:
-abstract: Outbreak management has always been one of the most important mission for healthcare institutions, not only to prevent transmissions of diseases/illnesses but also to protect public health. Especially in the COVID-19 era, outbreak response and management is considered as the top priority in healthcare institution operation. This paper discusses the big picture of outbreak management in Toronto health institutions from 2020 to 2022, as well as pointing out the relationship between healthcare setting, outbreak type and outbreak response.  
+date: "`r format(Sys.time(), '%d %b %Y')`"
+format:
+  pdf:
+    documentclass: scrartcl
+    papersize: a4
+    mainfont: "Garamond"
+    sansfont: "Garamond"
+thanks: 'Code and data are available at: https://github.com/julieenguyennn/Outbreak-Management-in-Toronto-Health-Institutions'
+abstract: Outbreak management has always been one of the most important mission for healthcare institutions, not only to prevent transmissions of diseases/illnesses but also to protect public health. Especially in the COVID-19 era, outbreak response and management is considered as the top priority in healthcare institution operation. This paper discusses the big picture of outbreak management in Toronto health institutions from 2020 to 2022, as well as pointing out the relationship between healthcare setting, outbreak type and outbreak response.
+number-sections: true
+bibliography: reference.bib
 execute: 
   message: false
   warning: false
+  echo: false
 ---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
 
-## Introduction
-
-  In the previous years, a lot has been learned with regards to the COVID-19 pandemic. With the unprecedented cases increase of different diseases, the responsibility for outbreak response and management in healthcare institutions has become more important than ever before. Outbreak management helps stop the further transmission of illnesses/diseases by identifying the source and implementing control measures. 
-
-  In order to protect and improve public health, the Toronto Public Health works with healthcare institutions to prevent and control institutional outbreaks, including the use of best practices in infection prevention control. Healthcare institutions are required to monitor staff and patients/residents for signs and symptoms of gastroenteric and respiratory infections under the Ontario Health Protection and Promotion Act (HPPA). (CITE) The institutions must also actively seek, detect and report suspected and/or confirmed outbreaks to their local public health unit. 
-
-  In the following paper, I will delve into the Outbreaks in Toronto Healthcare Institutions in the previous years to shed light on the differences and trends in reacting to outbreaks. I will first guide you through the data collection and analyzing process, which will be explained thoroughly in Section 2. Then I will visualize the data and explain the implications of the data, finally draw some limitations and conclusions of this data set.
-
-## Data
-### Data Collection
-
-  All the data used in this paper was obtained from the City of Toronto Open Data Portal and is titled "Outbreaks in Toronto Healthcare Institutions". The dataset is published by Toronto Public Health and is refreshed weekly, with the last refresh on Jan 19, 2023. The data provided on the portal include subsets of data from the year 2003. Nevertheless, I will just focus on the data from 2020 to 2022 in order to witness the changes in outbreak management during the COVID-19 era. According to opendatatoronto (cite), an outbreak is defined as "a localized increase (e.g. in an institution, or a specific ward or floor within an institution) in the rate of infection or illness, above that which is expected."
-
-  I first acquired the data using opendatatoronto package [@datatoronto] and imported to RStudio using the R package [cite]. To process the data, all the necessary libraries into R script, including tidyverse [@tidyverse] and janitor [@janitor] to clean and manipulate the data, ggplot2 [@ggplot], knitr [@knitr], RColorBrewer [@RColor], and kableExtra [@kableExtra] to visualize the data.
-
-  After loading the data to the local environment, I started to create new dataframes. As the opendatatoronto @datatoronto package consists of multiple datasets by year, I had to download and extract the datasets of the year 2020, 2021, and 2022 separately, and  calling it *outbreak_2020*, *outbreak_2021*, and *outbreak_2022* respectively (ADD FOOTNOTE HERE). 
-
-### Data Cleaning
-
-  For data cleaning, the target samples and focus were the type of outbreaks. I first observed the number occurrences of outbreaks from 2020 to 2022 in order to understand context of how outbreaks emerged. I also considered the type of outbreaks happened in each setting to understand whether the setting affect the control of outbreak. I thus filtered the datasets based on those criteria using tidyverse (@tidyverse) and janitor (@janitor), and dplyr (@dplyr). 
-  I then created two dataframes by outbreak type and outbreak setting in order to witnesss
-
-### Analyzing and Visualizing the Data
-
-  The Toronto Health Institutions divided the outbreaks into 03 main types: Enteric, Respiratory, and other types. Throughout the period, there was a total of 2080 cases reported to experience an outbreak, including a surge from 2021 to 2022. In particular, Toronto health institutions underwent 553 cases in 2020, 394 cases in 2021, and 1133 cases in 2022.
-
-```{r}
-library(dplyr)
-
-```
-
-  It is apparent that Respiratory diseases remain the major outbreak in Toronto healthcare institutions throughout the period.
-
-```{r}
-#| echo: false
 library(opendatatoronto)
 library(dplyr)
 library(janitor)
@@ -53,67 +27,197 @@ library(tidyverse)
 library(knitr)
 library(RColorBrewer)
 library(kableExtra)
-
-package <- show_package("80ce0bd7-adb2-4568-b9d7-712f6ba38e4e")
-package
-
-# get all resources for this package
-resources <- list_package_resources("80ce0bd7-adb2-4568-b9d7-712f6ba38e4e")
-
-# identify datastore resources; by default, Toronto Open Data sets datastore resource format to CSV for non-geospatial and GeoJSON for geospatial resources
-datastore_resources <- filter(resources, tolower(format) %in% 'csv')
-
-# load the first datastore resource as a sample
-outbreak_2022 <- filter(datastore_resources, row_number()==15) %>% 
-  get_resource()
-
-# load the
-outbreak_2021 <- filter(datastore_resources, row_number()==14) %>% 
-  get_resource()
-
-# load the
-outbreak_2020 <- filter(datastore_resources, row_number()==13) %>% 
-  get_resource()
-
-outbreak_2020 %>% clean_names()
-outbreak_2021 %>% clean_names()
-outbreak_2022 %>% clean_names()
-
-#|echo:true
-# Number of occurrences in each type of outbreak throughout the years
-  # Count the outbreaks in each year by type 
-  ob_by_type_2020 <- outbreak_2020 %>% count(Type.of.Outbreak) %>% 
-    mutate(year = 2020) %>% rename(Occurences = "n")
-  ob_by_type_2021 <- outbreak_2021 %>% count(Type.of.Outbreak) %>% 
-    mutate(year=2021) %>% rename(Occurences = "n")
-  ob_by_type_2022 <- outbreak_2022 %>% count(Type.of.Outbreak) %>% 
-    mutate(year=2022) %>% rename(Occurences = "n")
-  
-  # Merge dataframes
-  ob_by_type <- bind_rows(ob_by_type_2020,ob_by_type_2021,ob_by_type_2022)
-
-  # Generate graph
-  ob_by_type$year <- as.factor(ob_by_type$year)
-  ggplot(data=ob_by_type, aes(x=year, y=Occurences, group=Type.of.Outbreak)) +
-    geom_line(aes(color=Type.of.Outbreak), size=0.8)+
-    geom_point(aes(color=Type.of.Outbreak))+
-    scale_linetype_manual(values=c("solid","dotted","twodash"))+
-    scale_color_brewer(palette="Dark2")+
-    theme_minimal()
 ```
 
 
+## Introduction
+
+  In the previous years, a lot has been learned with regards to the COVID-19 pandemic. With the unprecedented cases increase of different diseases, the responsibility for outbreak response and management in healthcare institutions has become more important than ever before. Outbreak management helps stop the further transmission of illnesses/diseases by identifying the source and implementing control measures. 
+
+  In order to protect and improve public health, the Toronto Public Health works with healthcare institutions to prevent and control institutional outbreaks, including the use of best practices in infection prevention control. Healthcare institutions are required to monitor staff and patients/residents for signs and symptoms of gastroenteric and respiratory infections under the Ontario Health Protection and Promotion Act (HPPA) (@datatoronto). The institutions must also actively seek, detect and report suspected and/or confirmed outbreaks to their local public health unit. 
+
+  In the following paper, I will delve into the Outbreaks in Toronto Healthcare Institutions in the previous years to shed light on the differences and trends in reacting to outbreaks.According to opendatatoronto [@datatoronto], an outbreak is defined as "a localized increase (e.g. in an institution, or a specific ward or floor within an institution) in the rate of infection or illness, above that which is expected." I will first guide you through the data collection and analyzing process, which will be explained thoroughly in Section 2. Then I will visualize the data and explain the implications of the data, finally draw some limitations and conclusions of this data set.
+
+## Data
+### Source
+
+  All the data used in this paper was obtained from the City of Toronto Open Data Portal and is titled "Outbreaks in Toronto Healthcare Institutions". The dataset is published by Toronto Public Health and is refreshed weekly, with the lastest refresh on Jan 19, 2023. The data provided on the portal include subsets of data from the year 2003 to the time of writing, which is 2023. For each year, the dataset displays each observation's details, namely:
+  
+  1. Outbreak setting: the type of facility, in terms of the type of healthcare provided
+  
+  2. Type of Outbreak: The mode of transmission classification description of the outbreak
+  
+  3. Causative & Etiological Agent: the aetiological agent(s) that have been identified from one or more outbreak-related cases
+  
+  4. Date Outbreak Began & Date Declared Over
+  
+  5. Active Status
+  
+  6. Institution Name & Address
+
+### Methodology
+  Based on the dataset, I first generated some questions that this paper aim to answer to gain a better understanding of outbreak management over the COVIC-19 in Toronto health institutions, specifically:
+  
+  (1) What type of outbreak was the most encountered by the institutions during the period?
+  (2) Which setting was more prone to expect an outbreak?
+  (3) How was the response rate for each type of outbreak in each setting? 
+  
+  In order to answer those questions, I chose the 03 dataset that lies in the COVID-19 era - 2020, 2021, and 2022, to analyze, compare, and contrast.  
+  
+  During the process, all the necessary libraries and packages, tidyverse [@tidyverse], janitor [@janitor], ggplot2 [@ggplot], RColorBrewer [@RColor], and kableExtra [@kableExtra], are utilised.
+
+## Discussion
+   To comprehend the context, I first observed the total cases that were recorded. Throughout the period, there was a total of 2080 cases reported to experience an outbreak, with a surge from 2021 to 2022. In particular, Toronto health institutions underwent 553 cases in 2020, 394 cases in 2021, and 1133 cases in 2022. (@ref(tab:no_outbreak))
 
 ```{r}
-library(dplyr)
 
+outbreak_2020 <- read.csv(here::here("inputs/data/outbreak_2020.csv"))
+outbreak_2021 <- read.csv(here::here("inputs/data/outbreak_2021.csv"))
+outbreak_2022 <- read.csv(here::here("inputs/data/outbreak_2022.csv"))
+```
+
+```{r no_outbreak}
+# Total number of outbreaks
+no_outbreak <-
+  data.frame(Year = c("2020","2021","2022"), Outbreak_Amount = c(nrow(outbreak_2020),nrow(outbreak_2021),nrow(outbreak_2022)))
+```  
+
+```{r}
+# Generate graph
+  no_outbreak %>%
+    knitr::kable(caption = "Total number of outbreaks from 2020 - 2022", 
+                 col.names = c("Year", "No. of Outbreak"),
+                 align = c('l', 'l'),
+                 booktabs = T) %>%
+    kable_styling(full_width = FALSE, position = "center", latex_options = c("striped", "HOLD_position"))
+```
+
+  Looking deeper into these outbreaks, it is obvious that Respiratory diseases remain the major type of outbreak throughout the period, with a surge of approximately 700 cases from 2021 to 2022. While Enteric and other types of outbreak only account for a very small proportion of the outbreaks in total, these two types also remain constant throughout the period. See @ for illustration.
+
+```{r}
+outbreak_2020 <- read_csv(here::here("inputs/data/outbreak_2020.csv"))
+outbreak_2021 <- read_csv(here::here("inputs/data/outbreak_2021.csv"))
+outbreak_2022 <- read_csv(here::here("inputs/data/outbreak_2022.csv"))
+
+# Count the outbreaks in each year by type 
+  ob_by_type_2020 <- outbreak_2020 %>% count(Type.of.Outbreak) %>% 
+    mutate(year = 2020) %>% 
+    rename(Cases = "n")
+  ob_by_type_2021 <- outbreak_2021 %>% count(Type.of.Outbreak) %>% 
+    mutate(year=2021)%>% 
+    rename(Cases = "n")
+  other_2021 <- data.frame(Type.of.Outbreak = "Other", Cases = 0, year = 2021)
+  ob_by_type_2021 <- bind_rows(ob_by_type_2021, other_2021)
+  ob_by_type_2022 <- outbreak_2022 %>% count(Type.of.Outbreak) %>% 
+    mutate(year=2022)%>% 
+    rename(Cases = "n")
+  
+  # Merge dataframes
+  ob_by_type <- bind_rows(ob_by_type_2020,ob_by_type_2021,ob_by_type_2022)
+```  
+
+```{r}
+#| label: fig-occurencebyyear
+#| fig-cap: Outbreaks occured in 2020 - 2022 by type
+  # Generate graph
+  ob_by_type$year <- as.factor(ob_by_type$year)
+  ggplot(ob_by_type, aes(fill=Type.of.Outbreak, y=Cases, x=year)) + 
+    geom_bar(position="dodge", stat="identity") +
+    geom_text(
+      aes(label = Cases),
+      colour = "black", size = 3,
+      vjust = -0.2, position = position_dodge(.9)) +
+    guides(fill=guide_legend(title="Type of Outbreak"))
+```
+
+  When examining the correlation between the outbreak type and the setting, it is noticed that the majority of outbreaks happened in Long-term Care Housings (LTCH). In 2020, those LTCHs witnessed 20 cases of Enteric outbreak and 296 cases of Respiratory outbreak. In 2021, the number of outbreak dropped down to 187 cases in both type, while that of in 2022 increased to more than 450 cases. A notable detail to point out is that other types of outbreak only occurred in the Acute Care division of the hospitals. In 2022, Toronto also encountered the emergence of outbreak in Transitional Care with 9 cases. It is also noticeable that 
+
+```{r}
+# Number of outbreaks happened in each setting
+  # Count the outbreaks in each setting by type 
+  ob_setting_2020 <- outbreak_2020 %>% group_by(Type.of.Outbreak) %>% count(Outbreak.Setting) %>% arrange(Type.of.Outbreak, Outbreak.Setting)
+  ob_setting_2021 <- outbreak_2021 %>% group_by(Type.of.Outbreak) %>% count(Outbreak.Setting)%>% arrange(Type.of.Outbreak, Outbreak.Setting)
+  ob_setting_2022 <- outbreak_2022 %>% group_by(Type.of.Outbreak) %>% count(Outbreak.Setting)%>% arrange(Type.of.Outbreak, Outbreak.Setting)
+
+  # Merge dataframes
+  ob_setting <- merge(merge(ob_setting_2020,ob_setting_2021, by = c("Type.of.Outbreak","Outbreak.Setting"), all = TRUE, sort = TRUE), ob_setting_2022, by = c("Type.of.Outbreak","Outbreak.Setting"), all = TRUE, sort = TRUE) %>% 
+    rename("2020" = n.x, "2021" = n.y, "2022" = n)
+  
+  # Generate graph
+  cleaned_ob_setting <- select(ob_setting, c(Outbreak.Setting, "2020", "2021", "2022")) 
+    colnames(cleaned_ob_setting) <- c("","2020","2021","2022")
+  names(cleaned_ob_setting$Outbreak.Setting) <- NULL
+  kbl(cleaned_ob_setting,caption = "The number cases of outbreak by setting from 2020 - 2022", booktabs = TRUE) %>% 
+    kable_styling(full_width = TRUE, latex_options = c("striped", "hold_position")) %>% 
+    column_spec(1, width = "8cm") %>% 
+    pack_rows("Enteric",start_row = 1, end_row = 4) %>% 
+    pack_rows("Other", start_row = 5, end_row = 5) %>% 
+    pack_rows("Respiratory", start_row = 6, end_row = 11) 
 ```
 
 aaaa 
 
 ```{r}
-
+# Response rate
+  # Year 2020
+  daybegan_2020 <- date_ob_2020 <- as.Date(outbreak_2020$Date.Outbreak.Began)  
+  dayover_2020 <- date_ob_2020 <- as.Date(outbreak_2020$Date.Declared.Over) 
+  
+  # Year 2021
+  daybegan_2021 <- date_ob_2021 <- as.Date(outbreak_2021$Date.Outbreak.Began)  
+  dayover_2021 <- date_ob_2021 <- as.Date(outbreak_2021$Date.Declared.Over)
+  
+  # Year 2022
+  daybegan_2022 <- date_ob_2022 <- as.Date(outbreak_2022$Date.Outbreak.Began)  
+  dayover_2022 <- date_ob_2022 <- as.Date(outbreak_2022$Date.Declared.Over)
 ```
+  
+```{r}
+  #Calculate response time for each
+  response_rate_2020 <- outbreak_2020 %>% mutate(daybegan_2020,dayover_2020,response_rate = difftime(dayover_2020,daybegan_2020,unit = "days")) #calculate response rate
+  response_rate_2020$response_rate <- as.numeric(response_rate_2020$response_rate)
+  cleaned_response_rate_2020 <- response_rate_2020 %>% select(c(Outbreak.Setting, Type.of.Outbreak,response_rate)) %>%
+    group_by(Outbreak.Setting, Type.of.Outbreak) %>%
+    summarise(response_rate = round(mean(response_rate), digits = 0), .groups = 'drop') %>% 
+    arrange(Type.of.Outbreak)
+  
+  response_rate_2021 <- outbreak_2021 %>% mutate(daybegan_2021,dayover_2021,response_rate = difftime(dayover_2021,daybegan_2021,unit = "days"))
+  response_rate_2021$response_rate <- as.numeric(response_rate_2021$response_rate)
+  cleaned_response_rate_2021 <- response_rate_2021 %>% select(c(Outbreak.Setting, Type.of.Outbreak,response_rate)) %>%
+    group_by(Outbreak.Setting, Type.of.Outbreak) %>%
+    summarise(response_rate = round(mean(response_rate), digits = 0), .groups = 'drop') %>% 
+    arrange(Type.of.Outbreak)
+    
+  response_rate_2022 <- outbreak_2022 %>% mutate(daybegan_2022,dayover_2022,response_rate = difftime(dayover_2022,daybegan_2022,unit = "days"))
+  response_rate_2022$response_rate <- as.numeric(response_rate_2022$response_rate)
+  cleaned_response_rate_2022 <- response_rate_2022 %>%
+    filter(Active == "N") %>% 
+    select(c(Outbreak.Setting, Type.of.Outbreak,response_rate)) %>%
+    group_by(Outbreak.Setting, Type.of.Outbreak) %>%
+    summarise(response_rate = round(mean(response_rate), digits = 0), .groups = 'drop') %>% 
+    arrange(Type.of.Outbreak)
+```
+
+```{r}
+  # Merge all data
+  all_response_rate <- merge(merge(cleaned_response_rate_2020, cleaned_response_rate_2021, by = c("Type.of.Outbreak","Outbreak.Setting"), all = TRUE, sort = TRUE), cleaned_response_rate_2022, by = c("Type.of.Outbreak","Outbreak.Setting"), all = TRUE, sort = TRUE) %>% 
+  rename("2020" = response_rate.x, "2021" = response_rate.y, "2022" = response_rate, "Outbreak Type" = Type.of.Outbreak, "Setting" = Outbreak.Setting)
+```
+  
+```{r}
+  # Draw table
+  all_response_rate <- select(all_response_rate, c(Setting, "2020", "2021", "2022"))
+  colnames(all_response_rate) <- c("","2020","2021","2022")
+  names(all_response_rate$Outbreak.Setting) <- NULL
+  kbl(all_response_rate,caption = "Response rate by setting (days)", booktabs = TRUE) %>% 
+    kable_styling(full_width = TRUE, latex_options = c("striped", "hold_position")) %>% 
+    column_spec(1, width = "8cm") %>% 
+    pack_rows("Enteric",start_row = 1, end_row = 4) %>% 
+    pack_rows("Other", start_row = 5, end_row = 5) %>% 
+    pack_rows("Respiratory", start_row = 6, end_row = 11)
+```
+
+## Conclusion
 
 
 ## Reference

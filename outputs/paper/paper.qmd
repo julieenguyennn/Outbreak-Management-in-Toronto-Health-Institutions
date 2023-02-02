@@ -1,7 +1,8 @@
 ---
-title: "Outbreak Management in Toronto Health Institutions"
+title: "An analysis of outbreak management in Toronto Health Institutions from 2020 - 2022"
 author: "Julie Nguyen"
-date: "`r format(Sys.time(), '%d %b %Y')`"
+date: "`r Sys.time()`"
+date-format: "D MMMM YYYY"
 format:
   pdf:
     documentclass: scrartcl
@@ -30,6 +31,7 @@ library(kableExtra)
 ```
 
 
+
 ## Introduction
 
   In the previous years, a lot has been learned with regards to the COVID-19 pandemic. With the unprecedented cases increase of different diseases, the responsibility for outbreak response and management in healthcare institutions has become more important than ever before. Outbreak management helps stop the further transmission of illnesses/diseases by identifying the source and implementing control measures. 
@@ -44,15 +46,10 @@ library(kableExtra)
   All the data used in this paper was obtained from the City of Toronto Open Data Portal and is titled "Outbreaks in Toronto Healthcare Institutions". The dataset is published by Toronto Public Health and is refreshed weekly, with the lastest refresh on Jan 19, 2023. The data provided on the portal include subsets of data from the year 2003 to the time of writing, which is 2023. For each year, the dataset displays each observation's details, namely:
   
   1. Outbreak setting: the type of facility, in terms of the type of healthcare provided
-  
   2. Type of Outbreak: The mode of transmission classification description of the outbreak
-  
   3. Causative & Etiological Agent: the aetiological agent(s) that have been identified from one or more outbreak-related cases
-  
   4. Date Outbreak Began & Date Declared Over
-  
   5. Active Status
-  
   6. Institution Name & Address
 
 ### Methodology
@@ -62,15 +59,12 @@ library(kableExtra)
   (2) Which setting was more prone to expect an outbreak?
   (3) How was the response rate for each type of outbreak in each setting? 
   
-  In order to answer those questions, I chose the 03 dataset that lies in the COVID-19 era - 2020, 2021, and 2022, to analyze, compare, and contrast.  
-  
-  During the process, all the necessary libraries and packages, tidyverse [@tidyverse], janitor [@janitor], ggplot2 [@ggplot], RColorBrewer [@RColor], and kableExtra [@kableExtra], are utilised.
+  In order to answer those questions, I chose the 03 dataset that lies in the COVID-19 era - 2020, 2021, and 2022, to analyze, compare, and contrast. During the process, all the necessary libraries and packages, tidyverse [@tidyverse], janitor [@janitor], ggplot2 [@ggplot], RColorBrewer [@RColor], and kableExtra [@kableExtra], are utilised.
 
 ## Discussion
-   To comprehend the context, I first observed the total cases that were recorded. Throughout the period, there was a total of 2080 cases reported to experience an outbreak, with a surge from 2021 to 2022. In particular, Toronto health institutions underwent 553 cases in 2020, 394 cases in 2021, and 1133 cases in 2022. (@ref(tab:no_outbreak))
+   To comprehend the context, I first observed the total cases that were recorded. Throughout the period, there was a total of 2080 cases reported to experience an outbreak, with a surge from 2021 to 2022. In particular, Toronto health institutions underwent 553 cases in 2020, 394 cases in 2021, and 1133 cases in 2022. (@tbl-totaloutbreak)
 
 ```{r}
-
 outbreak_2020 <- read.csv(here::here("inputs/data/outbreak_2020.csv"))
 outbreak_2021 <- read.csv(here::here("inputs/data/outbreak_2021.csv"))
 outbreak_2022 <- read.csv(here::here("inputs/data/outbreak_2022.csv"))
@@ -83,16 +77,17 @@ no_outbreak <-
 ```  
 
 ```{r}
+#| label: tbl-totaloutbreak
+#| tbl-cap: "Total number of outbreaks from 2020 - 2022"
 # Generate graph
   no_outbreak %>%
-    knitr::kable(caption = "Total number of outbreaks from 2020 - 2022", 
-                 col.names = c("Year", "No. of Outbreak"),
-                 align = c('l', 'l'),
+    knitr::kable(col.names = c("Year", "No. of Outbreak"),
+                 align = c('l', 'c'),
                  booktabs = T) %>%
-    kable_styling(full_width = FALSE, position = "center", latex_options = c("striped", "HOLD_position"))
+    kable_styling(full_width = FALSE, latex_options = c("striped", "HOLD_position"))
 ```
 
-  Looking deeper into these outbreaks, it is obvious that Respiratory diseases remain the major type of outbreak throughout the period, with a surge of approximately 700 cases from 2021 to 2022. While Enteric and other types of outbreak only account for a very small proportion of the outbreaks in total, these two types also remain constant throughout the period. See @ for illustration.
+  Looking deeper into these outbreaks, it is obvious that Respiratory diseases remain the major type of outbreak throughout the period, with a surge of approximately 700 cases from 2021 to 2022. While Enteric and other types of outbreak only account for a very small proportion of the outbreaks in total, these two types also remain constant throughout the period. See @fig-casebyyear for illustration.
 
 ```{r}
 outbreak_2020 <- read_csv(here::here("inputs/data/outbreak_2020.csv"))
@@ -101,15 +96,15 @@ outbreak_2022 <- read_csv(here::here("inputs/data/outbreak_2022.csv"))
 
 # Count the outbreaks in each year by type 
   ob_by_type_2020 <- outbreak_2020 %>% count(Type.of.Outbreak) %>% 
-    mutate(year = 2020) %>% 
+    mutate(Year = 2020) %>% 
     rename(Cases = "n")
   ob_by_type_2021 <- outbreak_2021 %>% count(Type.of.Outbreak) %>% 
-    mutate(year=2021)%>% 
+    mutate(Year=2021)%>% 
     rename(Cases = "n")
-  other_2021 <- data.frame(Type.of.Outbreak = "Other", Cases = 0, year = 2021)
+  other_2021 <- data.frame(Type.of.Outbreak = "Other", Cases = 0, Year = 2021)
   ob_by_type_2021 <- bind_rows(ob_by_type_2021, other_2021)
   ob_by_type_2022 <- outbreak_2022 %>% count(Type.of.Outbreak) %>% 
-    mutate(year=2022)%>% 
+    mutate(Year=2022)%>% 
     rename(Cases = "n")
   
   # Merge dataframes
@@ -117,11 +112,11 @@ outbreak_2022 <- read_csv(here::here("inputs/data/outbreak_2022.csv"))
 ```  
 
 ```{r}
-#| label: fig-occurencebyyear
+#| label: fig-casebyyear
 #| fig-cap: Outbreaks occured in 2020 - 2022 by type
   # Generate graph
-  ob_by_type$year <- as.factor(ob_by_type$year)
-  ggplot(ob_by_type, aes(fill=Type.of.Outbreak, y=Cases, x=year)) + 
+  ob_by_type$Year <- as.factor(ob_by_type$Year)
+  ggplot(ob_by_type, aes(fill=Type.of.Outbreak, y=Cases, x=Year)) + 
     geom_bar(position="dodge", stat="identity") +
     geom_text(
       aes(label = Cases),
@@ -130,9 +125,12 @@ outbreak_2022 <- read_csv(here::here("inputs/data/outbreak_2022.csv"))
     guides(fill=guide_legend(title="Type of Outbreak"))
 ```
 
-  When examining the correlation between the outbreak type and the setting, it is noticed that the majority of outbreaks happened in Long-term Care Housings (LTCH). In 2020, those LTCHs witnessed 20 cases of Enteric outbreak and 296 cases of Respiratory outbreak. In 2021, the number of outbreak dropped down to 187 cases in both type, while that of in 2022 increased to more than 450 cases. A notable detail to point out is that other types of outbreak only occurred in the Acute Care division of the hospitals. In 2022, Toronto also encountered the emergence of outbreak in Transitional Care with 9 cases. It is also noticeable that 
+  When examining the correlation between the outbreak type and the setting, it is noticed that the majority of outbreaks happened in Long-term Care Housings (LTCH). In 2020, those LTCHs witnessed 20 cases of Enteric outbreak and 296 cases of Respiratory outbreak. In 2021, the number of outbreak dropped down to 187 cases in both type, while that of in 2022 increased to more than 450 cases. A notable detail to point out is that other types of outbreak only occurred in the Acute Care division of the hospitals. In 2022, Toronto also encountered the emergence of outbreak in Transitional Care with 9 cases. It is also noticeable that the hospital settings ceased to report cases for Enteric type of outbreak from 2021, on the other hand received more cases on respiratory diseases. (@tbl-setting)
 
 ```{r}
+#| label: tbl-setting
+#| tbl-cap: "The number cases of outbreak by setting from 2020 - 2022"
+
 # Number of outbreaks happened in each setting
   # Count the outbreaks in each setting by type 
   ob_setting_2020 <- outbreak_2020 %>% group_by(Type.of.Outbreak) %>% count(Outbreak.Setting) %>% arrange(Type.of.Outbreak, Outbreak.Setting)
@@ -142,20 +140,22 @@ outbreak_2022 <- read_csv(here::here("inputs/data/outbreak_2022.csv"))
   # Merge dataframes
   ob_setting <- merge(merge(ob_setting_2020,ob_setting_2021, by = c("Type.of.Outbreak","Outbreak.Setting"), all = TRUE, sort = TRUE), ob_setting_2022, by = c("Type.of.Outbreak","Outbreak.Setting"), all = TRUE, sort = TRUE) %>% 
     rename("2020" = n.x, "2021" = n.y, "2022" = n)
-  
-  # Generate graph
+
+# Generate graph
   cleaned_ob_setting <- select(ob_setting, c(Outbreak.Setting, "2020", "2021", "2022")) 
     colnames(cleaned_ob_setting) <- c("","2020","2021","2022")
   names(cleaned_ob_setting$Outbreak.Setting) <- NULL
-  kbl(cleaned_ob_setting,caption = "The number cases of outbreak by setting from 2020 - 2022", booktabs = TRUE) %>% 
-    kable_styling(full_width = TRUE, latex_options = c("striped", "hold_position")) %>% 
+  kbl(cleaned_ob_setting, booktabs = TRUE) %>% 
+    kable_styling(full_width = TRUE, latex_options = c("striped", "HOLD_position")) %>% 
     column_spec(1, width = "8cm") %>% 
     pack_rows("Enteric",start_row = 1, end_row = 4) %>% 
     pack_rows("Other", start_row = 5, end_row = 5) %>% 
-    pack_rows("Respiratory", start_row = 6, end_row = 11) 
+    pack_rows("Respiratory", start_row = 6, end_row = 11)
 ```
 
-aaaa 
+  Another significant aspect in outbreak response is the numbers that the outbreak is controlled. In this case, I calculated the average days that each type of outbreak are controlled by the settings, which is counted by days, as shown in @tbl-responserate. A limitation when looking into the duration that outbreak was controlled is that I only chose the observations that were successfully controlled by the end of 2022. 
+  In general, the LTCH had the highest response time with an average of 32 days in 2020, 35 days in 2021 followed by Retirement Home with 27 days in 2020 and 31 days in 2021.
+  
 
 ```{r}
 # Response rate
@@ -170,9 +170,7 @@ aaaa
   # Year 2022
   daybegan_2022 <- date_ob_2022 <- as.Date(outbreak_2022$Date.Outbreak.Began)  
   dayover_2022 <- date_ob_2022 <- as.Date(outbreak_2022$Date.Declared.Over)
-```
   
-```{r}
   #Calculate response time for each
   response_rate_2020 <- outbreak_2020 %>% mutate(daybegan_2020,dayover_2020,response_rate = difftime(dayover_2020,daybegan_2020,unit = "days")) #calculate response rate
   response_rate_2020$response_rate <- as.numeric(response_rate_2020$response_rate)
@@ -199,17 +197,17 @@ aaaa
 ```
 
 ```{r}
+#|label: tbl-responserate
+#|tbl-cap: "Response rate by setting (days)"
   # Merge all data
   all_response_rate <- merge(merge(cleaned_response_rate_2020, cleaned_response_rate_2021, by = c("Type.of.Outbreak","Outbreak.Setting"), all = TRUE, sort = TRUE), cleaned_response_rate_2022, by = c("Type.of.Outbreak","Outbreak.Setting"), all = TRUE, sort = TRUE) %>% 
   rename("2020" = response_rate.x, "2021" = response_rate.y, "2022" = response_rate, "Outbreak Type" = Type.of.Outbreak, "Setting" = Outbreak.Setting)
-```
-  
-```{r}
+
   # Draw table
   all_response_rate <- select(all_response_rate, c(Setting, "2020", "2021", "2022"))
   colnames(all_response_rate) <- c("","2020","2021","2022")
   names(all_response_rate$Outbreak.Setting) <- NULL
-  kbl(all_response_rate,caption = "Response rate by setting (days)", booktabs = TRUE) %>% 
+  kbl(all_response_rate, booktabs = TRUE) %>% 
     kable_styling(full_width = TRUE, latex_options = c("striped", "hold_position")) %>% 
     column_spec(1, width = "8cm") %>% 
     pack_rows("Enteric",start_row = 1, end_row = 4) %>% 
@@ -218,6 +216,8 @@ aaaa
 ```
 
 ## Conclusion
+Overall, 
 
+Through @tbl-setting and @tbl-responserate, I can conclude that one aspect that leads to longer response time is the number of cases reported in that setting. However, in 2022, although there were only 03 cases in experiences other types of outbreak but it took an average of 32 days to control them. Therefore, the number of cases doesn't account for the amount of time that the outbreak can be controlled. It is influenced by other aspects, such as human resources, supplies, environmental conditions, and systems, etc. - which was not mentioned in this dataset by @datatoronto.
 
 ## Reference

@@ -1,16 +1,17 @@
 ---
-title: "An analysis of outbreak management in Toronto Health Institutions from 2020 - 2022"
+title: "An analysis on outbreak management in Toronto Health Institutions from 2020 - 2022"
 author: "Julie Nguyen"
 date: "`r Sys.time()`"
 date-format: "D MMMM YYYY"
 format:
   pdf:
-    documentclass: scrartcl
+    documentclass: article
     papersize: a4
+    geometry: margin = 1in
     mainfont: "Garamond"
     sansfont: "Garamond"
 thanks: 'Code and data are available at: https://github.com/julieenguyennn/Outbreak-Management-in-Toronto-Health-Institutions'
-abstract: Outbreak management has always been one of the most important mission for healthcare institutions, not only to prevent transmissions of diseases/illnesses but also to protect public health. Especially in the COVID-19 era, outbreak response and management is considered as the top priority in healthcare institution operation. This paper discusses the big picture of outbreak management in Toronto health institutions from 2020 to 2022, as well as pointing out the relationship between healthcare setting, outbreak type and outbreak response.
+abstract: "Outbreak management has always been one of the most important mission for healthcare institutions, not only to prevent transmissions of diseases/illnesses but also to protect public health. Especially in the COVID-19 era, outbreak response and management is considered as the top priority in healthcare institution operation. This paper discusses the outbreak management in Toronto health institutions from 2020 to 2022, as well as pointing out the relationship between healthcare setting, outbreak type and response duration."
 number-sections: true
 bibliography: reference.bib
 execute: 
@@ -30,39 +31,38 @@ library(RColorBrewer)
 library(kableExtra)
 ```
 
-
-
 ## Introduction
+  In the previous years, a lot has been learned with regards to the COVID-19 pandemic. With the unprecedented increase in the number of cases of different diseases, the responsibility for outbreak response and management in healthcare institutions has become more important than ever before. Outbreak management helps stop the further transmission of illnesses/diseases by identifying the source and implementing control measures. 
 
-  In the previous years, a lot has been learned with regards to the COVID-19 pandemic. With the unprecedented cases increase of different diseases, the responsibility for outbreak response and management in healthcare institutions has become more important than ever before. Outbreak management helps stop the further transmission of illnesses/diseases by identifying the source and implementing control measures. 
+  In order to protect and improve public health, the Toronto Public Health works with healthcare institutions to prevent and control institutional outbreaks, including the use of best practices in infection prevention control. Healthcare institutions are required to monitor staff and patients/residents for signs and symptoms of gastroenteric and respiratory infections under the Ontario Health Protection and Promotion Act (HPPA) [@hppa]. The institutions must also actively seek, detect and report suspected and/or confirmed outbreaks to their local public health unit. 
 
-  In order to protect and improve public health, the Toronto Public Health works with healthcare institutions to prevent and control institutional outbreaks, including the use of best practices in infection prevention control. Healthcare institutions are required to monitor staff and patients/residents for signs and symptoms of gastroenteric and respiratory infections under the Ontario Health Protection and Promotion Act (HPPA) (@datatoronto). The institutions must also actively seek, detect and report suspected and/or confirmed outbreaks to their local public health unit. 
-
-  In the following paper, I will delve into the Outbreaks in Toronto Healthcare Institutions in the previous years to shed light on the differences and trends in reacting to outbreaks.According to opendatatoronto [@datatoronto], an outbreak is defined as "a localized increase (e.g. in an institution, or a specific ward or floor within an institution) in the rate of infection or illness, above that which is expected." I will first guide you through the data collection and analyzing process, which will be explained thoroughly in Section 2. Then I will visualize the data and explain the implications of the data, finally draw some limitations and conclusions of this data set.
+  In the following paper, I will delve into the outbreaks in Toronto healthcare institutions during the COVID-19 period to shed light on the differences and trends in reacting to outbreaks. According to opendatatoronto [@datatoronto], an outbreak is defined as "a localized increase (e.g. in an institution, or a specific ward or floor within an institution) in the rate of infection or illness, above that which is expected." I will first guide you through the data collection, methodology, and ethical concerns, which will be explained thoroughly in Section 2. Then I will discuss the data, visualize, and draw conclusions from the acquired data set.
 
 ## Data
 ### Source
-
-  All the data used in this paper was obtained from the City of Toronto Open Data Portal and is titled "Outbreaks in Toronto Healthcare Institutions". The dataset is published by Toronto Public Health and is refreshed weekly, with the lastest refresh on Jan 19, 2023. The data provided on the portal include subsets of data from the year 2003 to the time of writing, which is 2023. For each year, the dataset displays each observation's details, namely:
+  All data used in this paper was obtained from the City of Toronto Open Data Portal and is titled "Outbreaks in Toronto Healthcare Institutions". The dataset is published by Toronto Public Health and is refreshed weekly, with the lastest refresh on Jan 19, 2023. The data provided on the portal include subsets of data from the year 2003 to the time of writing, which is 2023. For each year, the dataset displays each observation's details, namely:
   
-  1. Outbreak setting: the type of facility, in terms of the type of healthcare provided
-  2. Type of Outbreak: The mode of transmission classification description of the outbreak
+  1. Outbreak setting: the type of facility, in terms of the type of healthcare provided, including Respiratory, Enteric (Gastroenteric), and Other
+  2. Type of Outbreak: the mode of transmission classification description of the outbreak
   3. Causative & Etiological Agent: the aetiological agent(s) that have been identified from one or more outbreak-related cases
   4. Date Outbreak Began & Date Declared Over
   5. Active Status
   6. Institution Name & Address
-
+  
 ### Methodology
-  Based on the dataset, I first generated some questions that this paper aim to answer to gain a better understanding of outbreak management over the COVIC-19 in Toronto health institutions, specifically:
+  Based on the dataset, I first generated some questions that this paper aims to answer to gain a better understanding of outbreak management over the COVID-19 in Toronto health institutions, specifically:
   
   (1) What type of outbreak was the most encountered by the institutions during the period?
   (2) Which setting was more prone to expect an outbreak?
-  (3) How was the response rate for each type of outbreak in each setting? 
+  (3) How long did it take for each type of setting control the outbreaks? 
   
-  In order to answer those questions, I chose the 03 dataset that lies in the COVID-19 era - 2020, 2021, and 2022, to analyze, compare, and contrast. During the process, all the necessary libraries and packages, tidyverse [@tidyverse], janitor [@janitor], ggplot2 [@ggplot], RColorBrewer [@RColor], and kableExtra [@kableExtra], are utilised.
+  In order to answer those questions, I chose the 03 dataset that lies in the COVID-19 era - 2020, 2021, and 2022, to analyze, compare, and contrast. During the process, all the necessary libraries and packages, R package [@rpackage] tidyverse [@tidyverse], janitor [@janitor], ggplot2 [@ggplot], RColorBrewer [@RColor], and kableExtra [@kableExtra], are utilised.
+  
+### Ethical Concerns & Limitations
+  Before diving into the discussion, I would like to make some comments on the ethical concerns and limitations when acquiring and analyzing this dataset. The major ethical issue of this dataset is the blind spot created from excluding the reasons that caused the outbreaks. Particularly, resources such as human labors, systems, finance, workplace environment, patients' condition and medical history, etc. contribute to the outbreak management. Although the causative and etiological agent of the outbreaks were stated, the lack of those aforementioned information in the dataset may decrease the validity and capacity to compare the relationship between the settings and how long outbreaks were controlled, as well as limit the opportunity to make better suggestions on how to improve outbreak management in those institutions.
 
 ## Discussion
-   To comprehend the context, I first observed the total cases that were recorded. Throughout the period, there was a total of 2080 cases reported to experience an outbreak, with a surge from 2021 to 2022. In particular, Toronto health institutions underwent 553 cases in 2020, 394 cases in 2021, and 1133 cases in 2022. (@tbl-totaloutbreak)
+   To comprehend the context, let's first observe the overall landscape, of the total cases that were recorded. Throughout the period, there was a total of 2080 cases reported to experience an outbreak, with a surge from 2021 to 2022. In particular, Toronto health institutions underwent 553 cases in 2020, 394 cases in 2021, and 1133 cases in 2022. (@tbl-totaloutbreak)
 
 ```{r}
 outbreak_2020 <- read.csv(here::here("inputs/data/outbreak_2020.csv"))
@@ -87,7 +87,7 @@ no_outbreak <-
     kable_styling(full_width = FALSE, latex_options = c("striped", "HOLD_position"))
 ```
 
-  Looking deeper into these outbreaks, it is obvious that Respiratory diseases remain the major type of outbreak throughout the period, with a surge of approximately 700 cases from 2021 to 2022. While Enteric and other types of outbreak only account for a very small proportion of the outbreaks in total, these two types also remain constant throughout the period. See @fig-casebyyear for illustration.
+  Looking deeper into these outbreaks, it is obvious that Respiratory diseases remain the major type of outbreak throughout the period, with a surge of approximately 700 cases from 2021 to 2022. While Enteric and other types of outbreak only accounted for a very small proportion of the outbreaks in total, these two types also remained constant throughout the period. See @fig-casebyyear for illustration.
 
 ```{r}
 outbreak_2020 <- read_csv(here::here("inputs/data/outbreak_2020.csv"))
@@ -113,7 +113,7 @@ outbreak_2022 <- read_csv(here::here("inputs/data/outbreak_2022.csv"))
 
 ```{r}
 #| label: fig-casebyyear
-#| fig-cap: Outbreaks occured in 2020 - 2022 by type
+#| fig-cap: "Outbreaks occured by type, from 2020 - 2022"
   # Generate graph
   ob_by_type$Year <- as.factor(ob_by_type$Year)
   ggplot(ob_by_type, aes(fill=Type.of.Outbreak, y=Cases, x=Year)) + 
@@ -125,7 +125,8 @@ outbreak_2022 <- read_csv(here::here("inputs/data/outbreak_2022.csv"))
     guides(fill=guide_legend(title="Type of Outbreak"))
 ```
 
-  When examining the correlation between the outbreak type and the setting, it is noticed that the majority of outbreaks happened in Long-term Care Housings (LTCH). In 2020, those LTCHs witnessed 20 cases of Enteric outbreak and 296 cases of Respiratory outbreak. In 2021, the number of outbreak dropped down to 187 cases in both type, while that of in 2022 increased to more than 450 cases. A notable detail to point out is that other types of outbreak only occurred in the Acute Care division of the hospitals. In 2022, Toronto also encountered the emergence of outbreak in Transitional Care with 9 cases. It is also noticeable that the hospital settings ceased to report cases for Enteric type of outbreak from 2021, on the other hand received more cases on respiratory diseases. (@tbl-setting)
+
+  When examining the correlation between the outbreak type and the setting, it is noticeable that the majority of outbreaks happened in Long-term Care Housings (LTCH). In 2020, those LTCHs witnessed 20 cases of Enteric outbreak and 296 cases of Respiratory outbreak. In 2021, the number of outbreak dropped down to 187 cases in both type, while that of in 2022 increased to more than 450 cases. Another notable detail to point out is that other types of outbreak only occurred in the Acute Care division of the hospitals. In 2022, Toronto also encountered the emergence of outbreak in Transitional Care with 9 cases. It is also apparent that hospital settings ceased to report cases for Enteric type of outbreak from 2021, on the other hand received more cases on respiratory diseases. (@tbl-setting)
 
 ```{r}
 #| label: tbl-setting
@@ -146,15 +147,15 @@ outbreak_2022 <- read_csv(here::here("inputs/data/outbreak_2022.csv"))
     colnames(cleaned_ob_setting) <- c("","2020","2021","2022")
   names(cleaned_ob_setting$Outbreak.Setting) <- NULL
   kbl(cleaned_ob_setting, booktabs = TRUE) %>% 
-    kable_styling(full_width = TRUE, latex_options = c("striped", "HOLD_position")) %>% 
+    kable_styling(latex_options = c("striped", "HOLD_position")) %>% 
     column_spec(1, width = "8cm") %>% 
     pack_rows("Enteric",start_row = 1, end_row = 4) %>% 
     pack_rows("Other", start_row = 5, end_row = 5) %>% 
     pack_rows("Respiratory", start_row = 6, end_row = 11)
 ```
 
-  Another significant aspect in outbreak response is the numbers that the outbreak is controlled. In this case, I calculated the average days that each type of outbreak are controlled by the settings, which is counted by days, as shown in @tbl-responserate. A limitation when looking into the duration that outbreak was controlled is that I only chose the observations that were successfully controlled by the end of 2022. 
-  In general, the LTCH had the highest response time with an average of 32 days in 2020, 35 days in 2021 followed by Retirement Home with 27 days in 2020 and 31 days in 2021.
+  Another significant aspect in outbreak response is the duration that the outbreak is controlled. In this case, I calculated the average days that each type of outbreak was controlled by the settings, as shown in @tbl-responserate. A limitation when looking into the duration that outbreak was controlled is that I only chose the observations that were successfully controlled by the end of 2022. 
+  In general, LTCHs had the highest response time in Respiratory disease with an average of 32 days in 2020, 35 days in 2021, followed by Retirement Home with 27 days in 2020 and 31 days in 2021. For Enteric disease, Retirement Home group remained stable in controlling the outbreaks throughout the period, with an average of 16 days. With the emergence of Respiratory disease in Transitional Care establishments in 2022, the average duration of outbreak control was rather high comparing to other kinds of setting.
   
 
 ```{r}
@@ -197,8 +198,8 @@ outbreak_2022 <- read_csv(here::here("inputs/data/outbreak_2022.csv"))
 ```
 
 ```{r}
-#|label: tbl-responserate
-#|tbl-cap: "Response rate by setting (days)"
+#| label: tbl-responserate
+#| tbl-cap: "Outbreak control duration by setting from 2020 - 2022 (days)"
   # Merge all data
   all_response_rate <- merge(merge(cleaned_response_rate_2020, cleaned_response_rate_2021, by = c("Type.of.Outbreak","Outbreak.Setting"), all = TRUE, sort = TRUE), cleaned_response_rate_2022, by = c("Type.of.Outbreak","Outbreak.Setting"), all = TRUE, sort = TRUE) %>% 
   rename("2020" = response_rate.x, "2021" = response_rate.y, "2022" = response_rate, "Outbreak Type" = Type.of.Outbreak, "Setting" = Outbreak.Setting)
@@ -208,7 +209,7 @@ outbreak_2022 <- read_csv(here::here("inputs/data/outbreak_2022.csv"))
   colnames(all_response_rate) <- c("","2020","2021","2022")
   names(all_response_rate$Outbreak.Setting) <- NULL
   kbl(all_response_rate, booktabs = TRUE) %>% 
-    kable_styling(full_width = TRUE, latex_options = c("striped", "hold_position")) %>% 
+    kable_styling(latex_options = c("striped", "HOLD_position")) %>% 
     column_spec(1, width = "8cm") %>% 
     pack_rows("Enteric",start_row = 1, end_row = 4) %>% 
     pack_rows("Other", start_row = 5, end_row = 5) %>% 
@@ -216,8 +217,9 @@ outbreak_2022 <- read_csv(here::here("inputs/data/outbreak_2022.csv"))
 ```
 
 ## Conclusion
-Overall, 
 
-Through @tbl-setting and @tbl-responserate, I can conclude that one aspect that leads to longer response time is the number of cases reported in that setting. However, in 2022, although there were only 03 cases in experiences other types of outbreak but it took an average of 32 days to control them. Therefore, the number of cases doesn't account for the amount of time that the outbreak can be controlled. It is influenced by other aspects, such as human resources, supplies, environmental conditions, and systems, etc. - which was not mentioned in this dataset by @datatoronto.
+  In conclusion, during the period of 2020 to 2022, the total number of outbreaks in Toronto health institutions fluctuated and surged to more than 1100 cases by the end of 2022. Specifically, Respiratory diseases accounted for the majority of the cases and most cases emerged in Long-term Care Housings.
+  
+  Through @tbl-setting and @tbl-responserate, it seems that one aspect that leads to longer response time is the number of cases reported in that setting. However, this cannot be concluded by just looking at this dataset. In particular, in 2022, although there were only 03 cases in experiences other types of outbreak but it took an average of 32 days to control them. In addition, as mentioned before, the lack of information of labor and environmental factors and the difference in the input for the number of cases and the average response days in 2022 affect the preciseness of the results. Therefore, the number of cases doesn't account for the amount of time that the outbreak can be controlled since it was influenced by other aspects - which was not mentioned in this dataset by opendatatoronto [@datatoronto].
 
 ## Reference

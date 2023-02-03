@@ -1,5 +1,5 @@
 #### Preamble ####
-# Purpose: Clean the data downloaded from opendatatoronto
+# Purpose: Clean the data downloaded from opendatatoronto and generate graph
 # Author: Julie Nguyen
 # Date: 2 February 2022
 # Contact: hongan.nguyen@utoronto.ca

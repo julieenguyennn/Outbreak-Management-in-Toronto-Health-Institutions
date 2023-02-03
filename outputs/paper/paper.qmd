@@ -11,7 +11,7 @@ format:
     mainfont: "Garamond"
     sansfont: "Garamond"
 thanks: 'Code and data are available at: https://github.com/julieenguyennn/Outbreak-Management-in-Toronto-Health-Institutions'
-abstract: "Outbreak management has always been one of the most important mission for healthcare institutions, not only to prevent transmissions of diseases/illnesses but also to protect public health. Especially in the COVID-19 era, outbreak response and management is considered as the top priority in healthcare institution operation. This paper discusses the outbreak management in Toronto health institutions from 2020 to 2022, as well as pointing out the relationship between healthcare setting, outbreak type and response duration."
+abstract: "Outbreak management has always been one of the most important mission for healthcare institutions, not only to prevent transmissions of diseases/illnesses but also to protect public health. Especially in the COVID-19 era, outbreak response and management is considered as the top priority in healthcare institution operation. This paper discusses the outbreak management in Toronto health institutions from 2020 to 2022, as well as pointing out the relationship between healthcare setting, outbreak type and response duration in order to improve the outbreak management in Toronto health institutions."
 number-sections: true
 bibliography: reference.bib
 execute: 
@@ -56,7 +56,7 @@ library(kableExtra)
   (2) Which setting was more prone to expect an outbreak?
   (3) How long did it take for each type of setting control the outbreaks? 
   
-  In order to answer those questions, I chose the 03 dataset that lies in the COVID-19 era - 2020, 2021, and 2022, to analyze, compare, and contrast. During the process, all the necessary libraries and packages, R package [@rpackage] tidyverse [@tidyverse], janitor [@janitor], ggplot2 [@ggplot], RColorBrewer [@RColor], and kableExtra [@kableExtra], are utilised.
+  In order to answer those questions, I chose the 03 dataset that lies in the COVID-19 era - 2020, 2021, and 2022, to analyze, compare, and contrast. During the process, all the necessary libraries and packages, R package [@rpackage] tidyverse [@tidyverse], janitor [@janitor], ggplot2 [@ggplot], RColorBrewer [@RColor], kableExtra [@kableExtra], and testthat [@testthat] are utilised.
   
 ### Ethical Concerns & Limitations
   Before diving into the discussion, I would like to make some comments on the ethical concerns and limitations when acquiring and analyzing this dataset. The major ethical issue of this dataset is the blind spot created from excluding the reasons that caused the outbreaks. Particularly, resources such as human labors, systems, finance, workplace environment, patients' condition and medical history, etc. contribute to the outbreak management. Although the causative and etiological agent of the outbreaks were stated, the lack of those aforementioned information in the dataset may decrease the validity and capacity to compare the relationship between the settings and how long outbreaks were controlled, as well as limit the opportunity to make better suggestions on how to improve outbreak management in those institutions.

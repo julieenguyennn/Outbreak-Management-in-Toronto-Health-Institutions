@@ -42,8 +42,8 @@ library(kableExtra)
 ### Source
   All data used in this paper was obtained from the City of Toronto Open Data Portal and is titled "Outbreaks in Toronto Healthcare Institutions". The dataset is published by Toronto Public Health and is refreshed weekly, with the lastest refresh on Jan 19, 2023. The data provided on the portal include subsets of data from the year 2003 to the time of writing, which is 2023. For each year, the dataset displays each observation's details, namely:
   
-  1. Outbreak setting: the type of facility, in terms of the type of healthcare provided, including Respiratory, Enteric (Gastroenteric), and Other
-  2. Type of Outbreak: the mode of transmission classification description of the outbreak
+  1. Outbreak setting: the type of facility, in terms of the type of healthcare provided
+  2. Type of Outbreak: the mode of transmission classification description of the outbreak, including Respiratory, Enteric (Gastroenteric), and Other
   3. Causative & Etiological Agent: the aetiological agent(s) that have been identified from one or more outbreak-related cases
   4. Date Outbreak Began & Date Declared Over
   5. Active Status
@@ -126,7 +126,7 @@ outbreak_2022 <- read_csv(here::here("inputs/data/outbreak_2022.csv"))
 ```
 
 
-  When examining the correlation between the outbreak type and the setting, it is noticeable that the majority of outbreaks happened in Long-term Care Housings (LTCH). In 2020, those LTCHs witnessed 20 cases of Enteric outbreak and 296 cases of Respiratory outbreak. In 2021, the number of outbreak dropped down to 187 cases in both type, while that of in 2022 increased to more than 450 cases. Another notable detail to point out is that other types of outbreak only occurred in the Acute Care division of the hospitals. In 2022, Toronto also encountered the emergence of outbreak in Transitional Care with 9 cases. It is also apparent that hospital settings ceased to report cases for Enteric type of outbreak from 2021, on the other hand received more cases on respiratory diseases. (@tbl-setting)
+  When examining the correlation between the outbreak type and the setting, it is noticeable that the majority of outbreaks happened in Long-term Care Housings (LTCH). In 2020, those LTCHs witnessed 20 cases of Enteric outbreak and 296 cases of Respiratory outbreak. In 2021, the number of outbreak dropped down to 187 cases in both type, while that of in 2022 increased to more than 450 cases. Another notable detail to point out is that other types of outbreak only occurred in the Acute Care division of the hospitals. In 2022, Toronto also encountered the emergence of outbreak in Transitional Care with 9 cases, all of which caused by Respiratory disease. It is also apparent that hospital settings ceased to report cases for Enteric type of outbreak from 2021, on the other hand received more cases on respiratory diseases. (@tbl-setting)
 
 ```{r}
 #| label: tbl-setting

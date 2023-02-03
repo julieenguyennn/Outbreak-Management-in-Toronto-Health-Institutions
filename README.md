@@ -1,6 +1,6 @@
 # READ ME BEFORE ACCESS TO DATA
 
-This repo features analysis of the Outbreak in Toronto Health Institutions, containing R scripts and a final PDF report. Data from 2020 to 2022 was examined, sourced from Open Data Toronto. This analysis revealed that Long-term Care Housings was more prone to witness outbreaks in Respiratory diseases.
+This repo features analysis of the Outbreak in Toronto Health Institutions, containing R scripts and a final PDF report. Data from 2020 to 2022 was examined, sourced from Open Data Toronto. This analysis revealed that Long-term Care Housings was more prone to witness outbreaks in Respiratory diseases and Respiratory disease accounted for the majority of outbreaks occured in Toronto.
 
 Guide to this repo:
 1. The final report can be found in outputs

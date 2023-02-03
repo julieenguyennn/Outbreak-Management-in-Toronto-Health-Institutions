@@ -1,3 +1,11 @@
+#### Preamble ####
+# Purpose: Simulate the dataset to be solved
+# Author: Julie Nguyen
+# Date: 2 February 2022
+# Contact: hongan.nguyen@utoronto.ca
+# Pre-requisites: 
+# - Have questions to be solved for the data
+
 simulated_data <-
   tibble("Setting" = 1:100,
          "Cases" = floor(runif(100, min=0, max=100)),

@@ -3,10 +3,8 @@
 # Author: Julie Nguyen
 # Date: 2 February 2022
 # Contact: hongan.nguyen@utoronto.ca
-# License: MIT
 # Pre-requisites: 
 # - Need to have downloaded the data on opendatatoronto and saved it to inputs/data
-# - Commit and push to github when change anything
 
 library(opendatatoronto)
 library(dplyr)

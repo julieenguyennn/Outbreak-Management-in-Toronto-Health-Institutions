@@ -8,6 +8,8 @@
 
 library(tidyverse)
 
+set.seed(1)
+
 # Generate a table that portrays the cases in each outbreak type by settings
 
 simulated_data_1 <-
